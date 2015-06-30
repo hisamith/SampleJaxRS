@@ -63,11 +63,23 @@ public class BasicAuthHandler implements AuthenticationHandler {
             //get the authorization header value, if provided
             String authzHeader = (String) authzHeaders.get(0);
 
+            String[] splittedHeaders = authzHeader.split(AUTH_HEADER_SPLITTER);
+            if(splittedHeaders.length < 2 && !splittedHeaders[1].contains(BASIC_AUTH_HEADER)) {
+                log.error("Invalid Auth header: " + splittedHeaders[1]);
+                return false;
+            }
             //decode it and extract username and password
-            byte[] decodedAuthHeader = Base64.decode(authzHeader.split(AUTH_HEADER_SPLITTER)[1]);
+            byte[] decodedAuthHeader = Base64.decode(splittedHeaders[1]);
             String authHeader = new String(decodedAuthHeader);
-            String userName = authHeader.split(DECODED_AUTH_HEADER_SPLITTER)[0];
-            String password = authHeader.split(DECODED_AUTH_HEADER_SPLITTER)[1];
+
+            String[] authHeaderSplittered = authHeader.split(DECODED_AUTH_HEADER_SPLITTER);
+
+            if(authHeaderSplittered.length < 2 ){
+                log.error("Invalid basic header(base64 encoded string) value.");
+                return false;
+            }
+            String userName = authHeaderSplittered[0];
+            String password = authHeaderSplittered[1];
             if (userName != null && password != null) {
                 String tenantDomain = MultitenantUtils.getTenantDomain(userName);
                 String tenantLessUserName = MultitenantUtils.getTenantAwareUsername(userName);
