@@ -22,13 +22,13 @@
 
     <jaxrs:server id="UnsecuredJaxRSServices" address="/unsecured_jaxrs">
         <jaxrs:serviceBeans>
-            <ref bean="unSecuredBean"/>
+            <ref bean="unsecuredServiceBean"/>
         </jaxrs:serviceBeans>
     </jaxrs:server>
 
     <jaxrs:server id="SecuredJaxRSServices" address="/secured_jaxrs">
         <jaxrs:serviceBeans>
-            <ref bean="securedBean"/>
+            <ref bean="securedServiceBean"/>
         </jaxrs:serviceBeans>
         <jaxrs:providers>
             <ref bean="authenticationFilter"/>
@@ -37,10 +37,10 @@
 
 
 
-    <bean id="unSecuredBean"
+    <bean id="unsecuredServiceBean"
           class="org.buddycode.jaxrs.samplejaxrs.rest.UnsecuredResource"/>
 
-    <bean id="securedBean"
+    <bean id="securedServiceBean"
           class="org.buddycode.jaxrs.samplejaxrs.rest.SecuredResource"/>
     <bean id="authenticationFilter"
           class="org.buddycode.jaxrs.samplejaxrs.authentication.AuthenticationFilter">
